@@ -6,10 +6,25 @@ pipeline {
   }
 
   environment {
+    // sonarQube
     SONARQUBE_SERVER = 'SonarQube' 
     SONAR_TOKEN = credentials('sonar_token')
+
+    // Telegram
     TELEGRAM_BOT_TOKEN = credentials('TG_TOKEN')    // ambil dari Jenkins Credentials
     TELEGRAM_CHAT_ID = credentials('TG_CHAT_ID')
+
+    // Andrew:
+      // TELEGRAM_BOT_TOKEN = '8029797501:AAHvAp4KV1KUabDAFN-Kalc58MDKm1sgQyc'
+      // TELEGRAM_CHAT_ID = '2052628431'
+
+    // Sri:
+      // TELEGRAM_TOKEN = '7631091755:AAENejqAcoa_EIhR5lPO_M9HiCwaVOWTw0A'
+      // TELEGRAM_CHAT_ID = '1252569426'
+
+    // Dockerhub
+    IMAGE_NAME = 'qrisss/cicd-learning'
+    IMAGE_TAG = 'latest'
   }
    parameters {
         booleanParam(
@@ -38,15 +53,25 @@ pipeline {
     }
 
     stage('Static Code Analysis (SAST) via Sonar') {
+      // -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+          // sebagai Konfigurasi Path Coverage ke Sonar
+      // mvn verify dipilih alih-alih mvn compile, agar testing dan laporan coverage dijalankan sebelum sonar:sonar.
       steps {
-
 sh """
-            mvn clean compile sonar:sonar \
+            mvn clean verify sonar:sonar \
   -Dsonar.projectKey=e2e-springboot-ci-cd \
   -Dsonar.projectName='e2e-springboot-ci-cd' \
   -Dsonar.host.url=http://sonarqube:9000 \
-  -Dsonar.token=${SONAR_TOKEN}
+  -Dsonar.token=${SONAR_TOKEN} \
+  -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
         """
+// sh """
+//             mvn clean compile sonar:sonar \
+//   -Dsonar.projectKey=e2e-springboot-ci-cd \
+//   -Dsonar.projectName='e2e-springboot-ci-cd' \
+//   -Dsonar.host.url=http://sonarqube:9000 \
+//   -Dsonar.token=${SONAR_TOKEN} \
+//         """
       }
     }
     stage('Send Telegram Notification'){
