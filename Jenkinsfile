@@ -33,8 +33,8 @@ pipeline {
 
 sh """
             mvn clean compile sonar:sonar \
-  -Dsonar.projectKey=springboot-jenkins-ci-cd \
-  -Dsonar.projectName='springboot-jenkins-ci-cd' \
+  -Dsonar.projectKey=e2e-springboot-ci-cd \
+  -Dsonar.projectName='e2e-springboot-ci-cd' \
   -Dsonar.host.url=http://sonarqube:9000 \
   -Dsonar.token=${SONAR_TOKEN}
         """
