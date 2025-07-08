@@ -74,4 +74,5 @@ Fullstack:
 mvn test -Dtest=TutorialControllerTests
 ```
 
-----
+---
+https://pond-struggle-count-pattern.trycloudflare.com/job/e2e-springboot-ci-cd/build?delay=0sec
