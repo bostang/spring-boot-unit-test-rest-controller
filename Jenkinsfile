@@ -13,7 +13,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/bostang/spring-boot-rest-api-unit-tests', branch: 'master'
+        git url: 'https://github.com/bostang/spring-boot-unit-test-rest-controller', branch: 'master'
       }
     }
 
