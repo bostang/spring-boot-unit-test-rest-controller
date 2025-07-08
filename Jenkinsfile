@@ -23,7 +23,7 @@ pipeline {
       // TELEGRAM_CHAT_ID = '1252569426'
 
     // Dockerhub
-    IMAGE_NAME = 'qrisss/cicd-learning'
+    IMAGE_NAME = 'bostang/springboot-e2e-ci-cd'
     IMAGE_TAG = 'latest'
   }
    parameters {
@@ -74,6 +74,16 @@ sh """
 //         """
       }
     }
+    stage('Build Docker Image') {
+  steps {
+    script {
+      sh """
+        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+      """
+    }
+  }
+}
+
     stage('Send Telegram Notification'){
                   steps {
                 script {
