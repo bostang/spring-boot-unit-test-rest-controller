@@ -1,17 +1,35 @@
 services:
 ############ Jenkins ############
+  # jenkins:
+  #   image: jenkins/jenkins:lts
+  #   container_name: jenkins
+  #   ports:
+  #     - "8080:8080"
+  #     - "50000:50000"
+  #   volumes:
+  #     - jenkins_home:/var/jenkins_home
+  #     # tetap tidak terinstall -> harus gunakan custom build image
+  #     - /var/run/docker.sock:/var/run/docker.sock  # 🐳 Docker Socket
+  #   privileged: true
+  #   networks:
+  #     - cicd-net
   jenkins:
-    image: jenkins/jenkins:lts
+    build:
+      context: .
+      # menggunakan Build Image Kustom
+      dockerfile: Dockerfile.jenkins
+    image: my-jenkins-with-docker
     container_name: jenkins
     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock  # 🐳 Docker Socket
+      - /var/run/docker.sock:/var/run/docker.sock
     privileged: true
     networks:
       - cicd-net
+
 #################################
 
 ############ Cloudflared ############

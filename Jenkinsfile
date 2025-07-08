@@ -32,6 +32,11 @@ pipeline {
             defaultValue: true,
             description: 'Enable Telegram notifications'
         )
+        booleanParam(
+            name: 'ENABLE_TEST',
+            defaultValue: true,
+            description: 'Enable Unit Test & SAST'
+        )
     }
 
   stages {
@@ -56,6 +61,7 @@ pipeline {
       // -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
           // sebagai Konfigurasi Path Coverage ke Sonar
       // mvn verify dipilih alih-alih mvn compile, agar testing dan laporan coverage dijalankan sebelum sonar:sonar.
+        if (params.ENABLE_TEST) {
       steps {
 sh """
             mvn clean verify sonar:sonar \
@@ -73,6 +79,7 @@ sh """
 //   -Dsonar.token=${SONAR_TOKEN} \
 //         """
       }
+        }
     }
     stage('Build Docker Image') {
   steps {

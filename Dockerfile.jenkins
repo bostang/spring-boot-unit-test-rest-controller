@@ -1,0 +1,13 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+# Install Docker CLI
+RUN apt-get update && \
+    apt-get install -y docker.io && \
+    groupadd docker || true && \
+    usermod -aG docker jenkins && \
+    mkdir -p /home/jenkins/.docker && \
+    chown -R jenkins:jenkins /home/jenkins/.docker
+
+USER jenkins
