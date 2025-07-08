@@ -58,29 +58,21 @@ pipeline {
     }
 
     stage('Static Code Analysis (SAST) via Sonar') {
-      // -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-          // sebagai Konfigurasi Path Coverage ke Sonar
-      // mvn verify dipilih alih-alih mvn compile, agar testing dan laporan coverage dijalankan sebelum sonar:sonar.
-        if (params.ENABLE_TEST) {
-      steps {
-sh """
-            mvn clean verify sonar:sonar \
-  -Dsonar.projectKey=e2e-springboot-ci-cd \
-  -Dsonar.projectName='e2e-springboot-ci-cd' \
-  -Dsonar.host.url=http://sonarqube:9000 \
-  -Dsonar.token=${SONAR_TOKEN} \
-  -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-        """
-// sh """
-//             mvn clean compile sonar:sonar \
-//   -Dsonar.projectKey=e2e-springboot-ci-cd \
-//   -Dsonar.projectName='e2e-springboot-ci-cd' \
-//   -Dsonar.host.url=http://sonarqube:9000 \
-//   -Dsonar.token=${SONAR_TOKEN} \
-//         """
-      }
-        }
+    when {
+        expression { return params.ENABLE_TEST }
     }
+    steps {
+        sh """
+            mvn clean verify sonar:sonar \
+              -Dsonar.projectKey=e2e-springboot-ci-cd \
+              -Dsonar.projectName='e2e-springboot-ci-cd' \
+              -Dsonar.host.url=http://sonarqube:9000 \
+              -Dsonar.token=${SONAR_TOKEN} \
+              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+        """
+    }
+}
+
     stage('Build Docker Image') {
   steps {
     script {
