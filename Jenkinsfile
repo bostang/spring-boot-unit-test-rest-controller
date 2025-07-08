@@ -50,6 +50,8 @@ sh """
       }
     }
     stage('Send Telegram Notification'){
+                  steps {
+                script {
       if (params.ENABLE_NOTIFICATIONS) {
         def startMessage = """
 🚀 <b>CI/CD Pipeline Started</b>
@@ -63,6 +65,8 @@ sh """
 🔗 <b>Console:</b> ${env.BUILD_URL}console
                     """
           sendTelegramMessage(startMessage)
+      }
+    }
       }
     }
   
